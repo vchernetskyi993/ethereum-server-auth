@@ -1,5 +1,4 @@
 # Ethereum Server Authentication
-# Ethereum Server Authentication
 
 This is an example of Ethereum wallet authentication usage in web2 back-end.
 
