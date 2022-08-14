@@ -14,10 +14,8 @@ fun validateEthereumSignature(call: ApplicationCall, nonceRepo: NonceRepository)
     val (address, signature) = match.destructured
     // TODO: parse ethereum signature
     val nonce = signature
-    val nonces = nonceRepo.noncesForAddress(address)
-    if (nonce !in nonces) {
+    if (!nonceRepo.remove(address, nonce)) {
         throw AuthException("Invalid nonce")
     }
-    nonceRepo.removeNonce(address, nonce)
     return Address(address)
 }

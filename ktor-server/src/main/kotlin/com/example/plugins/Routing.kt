@@ -15,7 +15,7 @@ fun Application.configureRouting(nonceRepo: NonceRepository) {
         post("/nonce/{address}") {
             val address = call.parameters["address"]
                 ?: throw IllegalArgumentException("`address` path param is required")
-            nonceRepo.addNonce(address, randomNonce())
+            nonceRepo.add(address, randomNonce())
             call.response.status(HttpStatusCode.OK)
         }
         get("/hello") {

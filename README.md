@@ -26,3 +26,21 @@ Authorization: Ethereum <address>.<signed 128-bit nonce as hex string>
    - parses signature and verifies nonce & signer
    - removes nonce for address
 5. Back-end periodically (e.g. every 5 mins) expires (i.e. removes) nonces
+
+## Usage
+
+1. Start server:
+
+```bash
+cd ktor-server
+./gradlew clean run
+```
+
+2. Start client:
+
+```bash
+cd react-client
+npm start
+```
+
+3. Go to `url` and connect your wallet

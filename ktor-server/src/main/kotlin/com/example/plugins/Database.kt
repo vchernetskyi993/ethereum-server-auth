@@ -6,8 +6,6 @@ import org.ktorm.dsl.and
 import org.ktorm.dsl.eq
 import org.ktorm.entity.Entity
 import org.ktorm.entity.add
-import org.ktorm.entity.filter
-import org.ktorm.entity.map
 import org.ktorm.entity.removeIf
 import org.ktorm.entity.sequenceOf
 import org.ktorm.schema.Table
@@ -71,7 +69,7 @@ object Nonces : Table<Nonce>("nonce") {
 }
 
 class NonceRepository(val database: Database) {
-    fun addNonce(address: String, nonce: String) {
+    fun add(address: String, nonce: String) {
         database.sequenceOf(Nonces).add(nonce(address, nonce))
     }
 
@@ -81,15 +79,10 @@ class NonceRepository(val database: Database) {
         issuedAt = Instant.now()
     }
 
-    fun noncesForAddress(address: String): Set<String> = database.sequenceOf(Nonces)
-        .filter { it.address eq address }
-        .map { it.nonce }
-        .toSet()
-
-    fun removeNonce(address: String, nonce: String) {
+    fun remove(address: String, nonce: String): Boolean =
         database.sequenceOf(Nonces)
-            .removeIf { (it.address eq address) and (it.nonce eq nonce) }
-    }
+            .removeIf { (it.address eq address) and (it.nonce eq nonce) } > 0
+
 }
 
 
