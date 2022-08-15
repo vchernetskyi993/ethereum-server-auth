@@ -3,15 +3,19 @@ package com.example.plugins
 import io.ktor.server.application.Application
 import org.ktorm.database.Database
 import org.ktorm.dsl.eq
+import org.ktorm.dsl.lt
 import org.ktorm.entity.Entity
 import org.ktorm.entity.add
 import org.ktorm.entity.filter
+import org.ktorm.entity.removeIf
 import org.ktorm.entity.sequenceOf
 import org.ktorm.schema.Table
 import org.ktorm.schema.timestamp
 import org.ktorm.schema.varchar
 import java.io.File
+import kotlin.time.Duration
 import java.time.Instant
+import kotlin.time.toJavaDuration
 
 fun Application.configureDatabase(): Database {
     val database = Database.connect(
@@ -83,6 +87,9 @@ class NonceStorage(private val database: Database) {
             .filter { it.address eq address }
             .asKotlinSequence()
 
+    fun expire(interval: Duration) {
+        val expirationTime = Instant.now().minus(interval.toJavaDuration())
+        database.sequenceOf(Nonces)
+            .removeIf { it.issuedAt lt expirationTime }
+    }
 }
-
-
