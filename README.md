@@ -43,4 +43,4 @@ cd react-client
 npm start
 ```
 
-3. Go to `url` and connect your wallet
+3. Go to `http://localhost:3000/` and connect your wallet

@@ -2,11 +2,10 @@ package com.example.plugins
 
 import io.ktor.server.application.Application
 import org.ktorm.database.Database
-import org.ktorm.dsl.and
 import org.ktorm.dsl.eq
 import org.ktorm.entity.Entity
 import org.ktorm.entity.add
-import org.ktorm.entity.removeIf
+import org.ktorm.entity.filter
 import org.ktorm.entity.sequenceOf
 import org.ktorm.schema.Table
 import org.ktorm.schema.timestamp
@@ -79,9 +78,10 @@ class NonceStorage(private val database: Database) {
         issuedAt = Instant.now()
     }
 
-    fun remove(address: String, nonce: String): Boolean =
+    fun byAddress(address: String): Sequence<Nonce> =
         database.sequenceOf(Nonces)
-            .removeIf { (it.address eq address) and (it.nonce eq nonce) } > 0
+            .filter { it.address eq address }
+            .asKotlinSequence()
 
 }
 

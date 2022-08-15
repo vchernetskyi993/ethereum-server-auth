@@ -1,6 +1,7 @@
 package com.example
 
 import com.example.plugins.NonceStorage
+import com.example.plugins.configureCors
 import com.example.plugins.configureDatabase
 import com.example.plugins.configureErrorHandling
 import com.example.plugins.configureRouting
@@ -15,4 +16,5 @@ fun Application.module() {
     configureSerialization()
     configureRouting(NonceStorage(configureDatabase()))
     configureErrorHandling()
+    configureCors()
 }
