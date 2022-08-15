@@ -68,7 +68,7 @@ object Nonces : Table<Nonce>("nonce") {
     val issuedAt = timestamp("issued_at").bindTo { it.issuedAt }
 }
 
-class NonceRepository(val database: Database) {
+class NonceStorage(private val database: Database) {
     fun add(address: String, nonce: String) {
         database.sequenceOf(Nonces).add(nonce(address, nonce))
     }

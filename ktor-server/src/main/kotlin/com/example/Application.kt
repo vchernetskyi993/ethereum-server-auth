@@ -1,6 +1,6 @@
 package com.example
 
-import com.example.plugins.NonceRepository
+import com.example.plugins.NonceStorage
 import com.example.plugins.configureDatabase
 import com.example.plugins.configureErrorHandling
 import com.example.plugins.configureRouting
@@ -13,6 +13,6 @@ fun main(args: Array<String>): Unit =
 @Suppress("unused") // application.conf references the main function. This annotation prevents the IDE from marking it as unused.
 fun Application.module() {
     configureSerialization()
-    configureRouting(NonceRepository(configureDatabase()))
+    configureRouting(NonceStorage(configureDatabase()))
     configureErrorHandling()
 }
