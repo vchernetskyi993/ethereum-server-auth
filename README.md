@@ -2,6 +2,12 @@
 
 This is an example of Ethereum wallet authentication usage in web2 back-end.
 
+* [Use case](#use-case)
+* [Technical flows](#technical-flows)
+   * [Authentication per-request](#authentication-per-request)
+   * [JWT session](#jwt-session)
+* [Usage](#usage)
+
 ## Use case
 
 - We want to use web2 back-end features and web3 Ethereum from front-end
@@ -47,7 +53,7 @@ Notes:
 
 * Back-end periodically (e.g. every 5 mins) expires (i.e. removes) nonces
 
-### JWT
+### JWT session
 
 We authenticate user once and use JWT for future interactions. 
 Common paradigm of access/refresh tokens could be used as well for even better user experience 
