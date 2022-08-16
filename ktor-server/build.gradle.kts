@@ -31,12 +31,15 @@ dependencies {
     implementation("io.ktor:ktor-server-netty-jvm:$ktorVersion")
     implementation("io.ktor:ktor-server-status-pages:$ktorVersion")
     implementation("io.ktor:ktor-server-cors:$ktorVersion")
+    implementation("io.ktor:ktor-server-auth:$ktorVersion")
+    implementation("io.ktor:ktor-server-auth-jwt:$ktorVersion")
     implementation("ch.qos.logback:logback-classic:$logbackVersion")
 
     implementation("com.github.komputing.kethereum:model:$kethereumVersion")
     implementation("com.github.komputing.kethereum:crypto:$kethereumVersion")
     implementation("com.github.komputing.kethereum:crypto_impl_bouncycastle:$kethereumVersion")
     implementation("com.github.komputing.kethereum:extensions_kotlin:$kethereumVersion")
+    implementation("com.github.komputing.kethereum:erc55:$kethereumVersion")
     implementation("com.github.komputing.khex:extensions-jvm:1.1.2")
 
     implementation("org.ktorm:ktorm-core:$ktormVersion")

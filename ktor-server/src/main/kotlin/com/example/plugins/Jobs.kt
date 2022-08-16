@@ -9,7 +9,7 @@ import kotlin.time.Duration
 fun Application.configureJobs(nonces: NonceStorage) {
     val expiration = ExpirationJob(
         nonces,
-        Duration.parse(environment.config.property("app.expiration").getString())
+        Duration.parse(environment.config.property("app.nonce.expiration").getString())
     )
     environment.monitor.subscribe(ApplicationStarted) {
         environment.log.info("Starting background jobs...")

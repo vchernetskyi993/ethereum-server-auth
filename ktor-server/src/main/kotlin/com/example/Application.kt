@@ -1,6 +1,7 @@
 package com.example
 
 import com.example.plugins.NonceStorage
+import com.example.plugins.configureAuthentication
 import com.example.plugins.configureCors
 import com.example.plugins.configureDatabase
 import com.example.plugins.configureErrorHandling
@@ -16,7 +17,9 @@ fun main(args: Array<String>): Unit =
 fun Application.module() {
     configureSerialization()
     val nonces = NonceStorage(configureDatabase())
-    configureRouting(nonces)
+    val authProps = configureAuthentication()
+    val signatureValidator = SignatureValidator(nonces)
+    configureRouting(nonces, authProps, signatureValidator)
     configureErrorHandling()
     configureCors()
     configureJobs(nonces)
