@@ -11,6 +11,8 @@ import org.kethereum.model.Address
 import org.kethereum.model.SignatureData
 import org.komputing.khex.extensions.clean0xPrefix
 import org.komputing.khex.model.HexString
+import java.math.BigInteger
+import java.security.SecureRandom
 
 private val tokenPattern = Regex("Ethereum +(0x[a-fA-F\\d]+)\\.0x([a-fA-F\\d]+)")
 
@@ -21,6 +23,13 @@ data class LoginRequest(
 )
 
 class AuthException(override val message: String) : Exception(message)
+
+fun randomNonce(): String {
+    val rnd = SecureRandom()
+    val bytes = ByteArray(16)
+    rnd.nextBytes(bytes)
+    return BigInteger(1, bytes).toString()
+}
 
 class SignatureValidator(
     private val nonces: NonceStorage,
