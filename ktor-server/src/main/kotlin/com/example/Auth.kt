@@ -2,16 +2,19 @@ package com.example
 
 import com.example.plugins.NonceStorage
 import io.ktor.http.Headers
+import kotlinx.serialization.Serializable
 import org.kethereum.crypto.signedMessageToKey
 import org.kethereum.crypto.toAddress
 import org.kethereum.erc55.isValid
 import org.kethereum.extensions.hexToBigInteger
 import org.kethereum.model.Address
 import org.kethereum.model.SignatureData
+import org.komputing.khex.extensions.clean0xPrefix
 import org.komputing.khex.model.HexString
 
 private val tokenPattern = Regex("Ethereum +(0x[a-fA-F\\d]+)\\.0x([a-fA-F\\d]+)")
 
+@Serializable
 data class LoginRequest(
     val address: String,
     val signature: String,
@@ -30,7 +33,7 @@ class SignatureValidator(
     }
 
     fun validate(body: LoginRequest): Address =
-        validate(body.address, body.signature)
+        validate(body.address, HexString(body.signature).clean0xPrefix().string)
 
     private fun validate(address: String, signature: String): Address {
         if (!Address(address).isValid()) {
