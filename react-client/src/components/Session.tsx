@@ -12,13 +12,15 @@ function Session({
   const [token, setToken] = React.useState("");
   const login = async () => {
     const address = await signer.getAddress();
+    const message = "Sign in to a server (it's free!).\n\nNonce: ";
     axios
       .post(`${serverUrl}/nonce/${address}`)
-      .then((nonce) => signer.signMessage(nonce.data))
+      .then((nonce) => signer.signMessage(`${message}${nonce.data}`))
       .then((signature) =>
         axios.post(`${serverUrl}/login`, {
           address,
           signature,
+          message: btoa(message),
         })
       )
       .then((resp) => setToken(resp.data.accessToken));

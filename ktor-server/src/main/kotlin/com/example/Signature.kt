@@ -13,13 +13,15 @@ import org.komputing.khex.extensions.clean0xPrefix
 import org.komputing.khex.model.HexString
 import java.math.BigInteger
 import java.security.SecureRandom
+import java.util.Base64
 
-private val tokenPattern = Regex("Ethereum +(0x[a-fA-F\\d]+)\\.0x([a-fA-F\\d]+)")
+private val tokenPattern = Regex("Ethereum +(0x[a-fA-F\\d]+)\\.0x([a-fA-F\\d]+)\\.?(.+)?$")
 
 @Serializable
 data class LoginRequest(
     val address: String,
     val signature: String,
+    val message: String = "",
 )
 
 class AuthException(override val message: String) : Exception(message)
@@ -38,20 +40,33 @@ class SignatureValidator(
         val match = headers["Authorization"]?.let { tokenPattern.find(it) }
             ?: throw AuthException("Invalid auth token")
         val (address, signature) = match.destructured
-        return validate(address, signature)
+        val message = if (match.groupValues.size == 4) {
+            match.groupValues[3]
+        } else {
+            ""
+        }
+        return validate(address, signature, message)
     }
 
     fun validate(body: LoginRequest): Address =
-        validate(body.address, HexString(body.signature).clean0xPrefix().string)
+        validate(
+            body.address,
+            HexString(body.signature).clean0xPrefix().string,
+            body.message,
+        )
 
-    private fun validate(address: String, signature: String): Address {
+    private fun validate(address: String, signature: String, messageBase64: String): Address {
         if (!Address(address).isValid()) {
             throw AuthException("Address is not valid")
         }
         val nonce = nonces.byAddress(address).find {
             // http://eips.ethereum.org/EIPS/eip-191
-            val message = "\u0019Ethereum Signed Message:\n${it.nonce.length}${it.nonce}"
-            val key = signedMessageToKey(message.toByteArray(), signature.toSignatureData())
+            val message = Base64.getDecoder().decode(messageBase64)
+            val messageWithNonce = message + it.nonce.toByteArray()
+            val fullMessage =
+                "\u0019Ethereum Signed Message:\n${messageWithNonce.size}".toByteArray() +
+                        messageWithNonce
+            val key = signedMessageToKey(fullMessage, signature.toSignatureData())
             key.toAddress() == Address(address)
         } ?: throw AuthException("Invalid nonce")
         nonce.delete()

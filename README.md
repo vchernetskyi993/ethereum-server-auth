@@ -41,7 +41,7 @@ Steps:
 
 ```
 POST /hello
-Authorization: Ethereum <address>.<signed 128-bit nonce as hex string>
+Authorization: Ethereum <address>.<signed 128-bit nonce as hex string>(.<optional base64 encoded action explanation>)
 ```
 
 4. Back-end:
@@ -80,7 +80,8 @@ Steps:
 POST /login
 {
    "address": "<address>",
-   "signature": "<signed 128-bit nonce as hex string>"
+   "signature": "<signed 128-bit nonce as hex string>",
+   "message": "<optional base64 encoded action explanation>"
 }
 ```
 
